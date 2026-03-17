@@ -1,22 +1,15 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "backend/app.py",
-      "use": "@vercel/python",
-      "config": {
-        "includeFiles": [
-          "frontend/**",
-          "models/**",
-          "data/**"
-        ]
-      }
+  "functions": {
+    "backend/app.py": {
+      "runtime": "@vercel/python"
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "backend/app.py"
-    }
+  },
+  "rewrites": [
+    { "source": "/predict", "destination": "/backend/app.py" },
+    { "source": "/upload", "destination": "/backend/app.py" },
+    { "source": "/batch-predict", "destination": "/backend/app.py" },
+    { "source": "/latest-stats", "destination": "/backend/app.py" },
+    { "source": "/api-info", "destination": "/backend/app.py" },
+    { "source": "/health", "destination": "/backend/app.py" }
   ]
 }
