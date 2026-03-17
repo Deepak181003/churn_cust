@@ -1,0 +1,63 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/app.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "frontend/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(assets/.*)",
+      "dest": "/frontend/$1"
+    },
+    {
+      "src": "/(css/.*)",
+      "dest": "/frontend/$1"
+    },
+    {
+      "src": "/(js/.*)",
+      "dest": "/frontend/$1"
+    },
+    {
+      "src": "/(.*\\.html)",
+      "dest": "/frontend/$1"
+    },
+    {
+      "src": "/(.*\\.png|.*\\.jpg|.*\\.svg|.*\\.ico)",
+      "dest": "/frontend/$1"
+    },
+    {
+      "src": "/predict",
+      "dest": "backend/app.py"
+    },
+    {
+      "src": "/upload",
+      "dest": "backend/app.py"
+    },
+    {
+      "src": "/batch-predict",
+      "dest": "backend/app.py"
+    },
+    {
+      "src": "/latest-stats",
+      "dest": "backend/app.py"
+    },
+    {
+      "src": "/api-info",
+      "dest": "backend/app.py"
+    },
+    {
+      "src": "/health",
+      "dest": "backend/app.py"
+    },
+    {
+      "src": "/",
+      "dest": "frontend/index.html"
+    }
+  ]
+}

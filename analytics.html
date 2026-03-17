@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics | ChurnGuard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Global Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-shield-halved"></i>
+                Churn<span>Guard</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html">Risk Dashboard</a></li>
+                <li><a href="analytics.html" class="active">Analytics</a></li>
+                <li><a href="upload.html">Upload Dataset</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container page-main">
+        <header class="page-header">
+            <h1>Global <span>Analytics</span> Overview</h1>
+            <p>Understand your aggregate churn drivers and cohort health.</p>
+        </header>
+
+        <section class="analytics-grid">
+            <!-- Metric Cards -->
+            <div class="metric-card">
+                <div class="metric-header">
+                    <i class="fa-solid fa-users text-primary"></i>
+                    <span>Total Monitored</span>
+                </div>
+                <div class="metric-value" id="totalMonitored">12,482</div>
+                <div class="metric-trend positive" id="totalTrend"><i class="fa-solid fa-arrow-trend-up"></i> +4.2% this month</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-header">
+                    <i class="fa-solid fa-user-minus text-warning"></i>
+                    <span>Predicted Churn</span>
+                </div>
+                <div class="metric-value"><span id="predictedChurn">1,240</span> <span class="text-sm">(<span id="churnRate">9.9</span>%)</span></div>
+                <div class="metric-trend positive" id="churnTrend"><i class="fa-solid fa-arrow-trend-down"></i> -1.1% this month</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <i class="fa-solid fa-sack-dollar text-success"></i>
+                    <span>Revenue at Risk</span>
+                </div>
+                <div class="metric-value">$<span id="revenueAtRisk">84,320</span></div>
+                <div class="metric-trend negative" id="revenueTrend"><i class="fa-solid fa-arrow-trend-up"></i> +$2.1k this month</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <i class="fa-solid fa-crosshairs text-primary"></i>
+                    <span>Model Accuracy</span>
+                </div>
+                <div class="metric-value"><span id="modelAccuracy">91.4</span>%</div>
+                <div class="metric-trend neutral"><i class="fa-solid fa-minus"></i> Stable</div>
+            </div>
+
+            <!-- Big chart area mock -->
+            <div class="card big-chart-card">
+                <h2><i class="fa-solid fa-chart-line"></i> Churn Trend (Last 6 Months)</h2>
+                <div class="mock-line-chart">
+                    <svg viewBox="0 0 100 40" class="line-svg">
+                        <polyline fill="none" class="line-path" points="0,30 20,25 40,28 60,15 80,20 100,10"/>
+                        <!-- Points -->
+                        <circle cx="0" cy="30" r="1.5"/>
+                        <circle cx="20" cy="25" r="1.5"/>
+                        <circle cx="40" cy="28" r="1.5"/>
+                        <circle cx="60" cy="15" r="1.5"/>
+                        <circle cx="80" cy="20" r="1.5"/>
+                        <circle cx="100" cy="10" r="1.5"/>
+                    </svg>
+                    <div class="x-axis">
+                        <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card info-card text-center">
+                <h3>Predict Individual Risk</h3>
+                <p>Need to run a deep analysis on a specific customer? Use our interactive simulator.</p>
+                <div class="hero-buttons" style="flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
+                    <a href="dashboard.html" class="btn btn-primary" style="width: 100%;"><i class="fa-solid fa-user-plus"></i> Predict New Customer</a>
+                    <button class="btn btn-secondary" style="width: 100%;">Export CSV Data</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 ChurnGuard Technologies. For demonstration purposes.</p>
+    </footer>
+
+    <script>
+        async function loadAnalytics() {
+            try {
+                const response = await fetch('/latest-stats');
+                const data = await response.json();
+                
+                if (data) {
+                    document.getElementById('totalMonitored').innerText = data.total_monitored.toLocaleString();
+                    document.getElementById('predictedChurn').innerText = data.predicted_churn_count.toLocaleString();
+                    document.getElementById('churnRate').innerText = data.churn_rate;
+                    document.getElementById('revenueAtRisk').innerText = data.revenue_at_risk.toLocaleString();
+                    document.getElementById('modelAccuracy').innerText = data.accuracy;
+                    
+                    if (!data.is_demo) {
+                        // Hide trends if it's real data (since we don't have historical comparisons yet)
+                        document.getElementById('totalTrend').classList.add('hidden');
+                        document.getElementById('churnTrend').classList.add('hidden');
+                        document.getElementById('revenueTrend').classList.add('hidden');
+                        
+                        // Update header to reflect real data
+                        document.querySelector('.page-header h1').innerHTML = 'Dynamic <span>Analytics</span> Overview';
+                        document.querySelector('.page-header p').innerText = 'Aggregate churn metrics from your latest uploaded dataset.';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading dynamic analytics:', error);
+            }
+        }
+        
+        window.onload = loadAnalytics;
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
